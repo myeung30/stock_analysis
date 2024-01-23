@@ -1,0 +1,61 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Stock App</title>
+    <style>
+        .feature {
+            height: 33.33%; /* Set each feature to occupy one-third of the width */
+            box-sizing: border-box; /* Include padding and border in the width */
+            padding: 10px; /* Add some padding around each feature */
+        }
+
+        .feature img {
+            width: 100%; /* Make the image fill the container */
+            height: auto; /* Maintain the aspect ratio */
+            display: block; /* Remove any extra spacing beneath the image */
+            margin: 0 auto; /* Center the image horizontally */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/watchlist">Personal Watch List</a></li>
+                <li><a href="/day3_trade">3-Day Trade Strategy</a></li>
+                <li><a href="/risk_return">Risk and Return Comparison</a></li>
+                <li>
+                    {% if session['username'] %}
+                        <a href="/logout">Log Out ({{ session['username'] }})</a>
+                    {% else %}
+                        <a href="/login?next={{ request.path }}">Log In</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="feature">
+        <a href="/watchlist">
+            <img src="{{ url_for('static', filename='personal_watchlist.jpg') }}" alt="Personal Watchlist">
+        </a>
+    </div>
+    <div class="feature">
+        <a href="/day3_trade">
+            <img src="{{ url_for('static', filename='day3.jpg') }}" alt="Day 3 trade">
+        </a>
+    </div>
+    <div class="feature">
+        <a href="/risk_return">
+            <img src="{{ url_for('static', filename='risk_return.jpg') }}" alt="risk_return">
+        </a>
+    </div>
+</div>
+</body>
+</html>

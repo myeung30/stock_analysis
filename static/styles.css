@@ -1,0 +1,198 @@
+/* Reset some default styles */
+body,
+h1,
+h2,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a box-sizing border-box model to all elements */
+* {
+    box-sizing: border-box;
+}
+
+/* Basic styling for the container */
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Center content and add padding on both sides */
+.page-container {
+    max-width: 1200px; /* Adjust as needed */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header styling */
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Feature styling */
+.feature {
+    margin-top: 20px;
+}
+
+.feature h2 {
+    color: #333;
+}
+
+/* Form and input styling */
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+/* Content and table styling */
+.content {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+/* Watchlist table styling */
+.watchlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.watchlist-table th, .watchlist-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.watchlist-table th {
+    background-color: #f2f2f2;
+}
+
+.remove-button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Highlighted row styling */
+.highlight-row {
+    background-color: #ffdddd; /* Light red background for highlighted rows */
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container,
+    .page-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+}
+
+/* make a circle watchlist */
+ul.watchlist, div.watchlist-container {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.watchlist-item {
+    margin: 10px;
+    position: relative;
+}
+
+.symbol-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #3498db; /* Change the background color as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff; /* Change the text color as needed */
+    position: relative;
+}
+
+.delete-icon {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    color: red; /* Change the color as needed */
+}
+
+.highlight {
+    color: rgb(203, 5, 187);  /* Change the color to your preference */
+    font-weight: bold;  /* Make the text bold, if desired */
+    font-size: large;
+}

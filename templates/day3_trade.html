@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>3-Day Trade Strategy</title>
+</head>
+<body>
+    <div class="page-container">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/watchlist">Personal Watch List</a></li>
+                <li><a href="/day3_trade">3-Day Trade Strategy</a></li>
+                <li><a href="/risk_return">Risk and Return Comparison</a></li>
+                {% if session['username'] %}
+                    <li><a href="/logout">Log Out ({{ session['username'] }})</a></li>
+                {% else %}
+                    <li><a href="/login">Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Understanding 3-Day Market Movements</h1>
+        <p>After a market drop, a common pattern involves a rebound, often associated with certain behaviors:</p>
+        <br>
+        <h2>First Day of Drop:</h2>
+        <p>Professional investors, hedge funds, and other institutional traders may cut losses, leading to a quick and significant market drop. Responding quickly and effectively to market conditions, they contribute to the initial downward pressure.</p>
+        <br>
+        <h2>Second Day of Drop:</h2>
+        <p>Traders with a slower response to market movements and some funds and investors may continue to push the market down, but with reduced strength compared to the first day. The selling pressure persists but tends to be less intense.</p>
+        <br>
+        <h2>Third Day of Drop:</h2>
+        <p>The selling power is often exhausted by the third day. Typically, only those with the lowest response to market conditions or those in a panic may continue to sell. This exhaustion of selling pressure often leads to a rebound, and the market may start to recover.</p>
+        <br>
+        <p>The 3-day rule is not only applicable to price drops but also to price increases.</p>
+        <br>
+
+        <h1>Testing the Strategy:</h1>
+        <p>By using some historical market data, let's find out the performance of this 3-day trade strategy below:</p>
+
+       
+        {% if result %}
+            <img src="data:image/png;base64,{{ day3_chart }}" alt="Trade Signals Chart">
+
+            <h2>Trade Data:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>% Change 2 Days Ago</th>
+                        <th>% Change Yesterday</th>
+                        <th>% Change on the trade day</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in trade_data.iterrows() %}
+                    <tr class="{% if (row['PercentageChangeYesterday'] > 0 and row['PercentageChange'] < 0) or (row['PercentageChangeYesterday'] < 0 and row['PercentageChange'] > 0) %}highlight-row{% endif %}">
+                            <td>{{ index.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ "{:.4f}".format(row['PercentageChange2DayAgo']) }}</td>
+                            <td>{{ "{:.4f}".format(row['PercentageChangeYesterday']) }}</td>
+                            <td>{{ "{:.4f}".format(row['PercentageChange']) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h2>Trade Results:</h2>
+            <p>Number of Trades: {{ num_trades }}</p>
+            <p>Cumulative Percentage Gain/Loss: {{ cumulative_percentage_gain }} %</p>
+            <br>
+            <p>That's mean you can get a cumulative <span class="highlight">{{ cumulative_percentage_gain }} %</span> gain in just <span class="highlight">{{ num_trades }}</span> trading days. ( Buy at the open and sell at the close on the Same Day)</p>
+            <br>
+            <h2>Test this strategy with other stock data: </h2>
+        {% endif %}
+
+        <div>
+            <form action="/day3_trade" method="post">
+                <label for="stock_symbol">Stock Symbol:</label>
+                <input type="text" id="stock_symbol" name="stock_symbol" required>
+                <br>
+                <label for="start_date">Start Date: (better start from longer duration, e.g. 01/01/2010)</label>
+                <input type="date" id="start_date" name="start_date" required>
+                <br>
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" required>
+                <br>
+                <label for="change1day">% Change Yesterday: (better test this strategy with significant % change, e.g. 3% or more)</label>
+                <input type="number" id="change1day" name="change1day" step="0.01" required>
+                <br>
+                <label for="change2day">% Change 2 Days Ago: (better test this strategy with significant % change, e.g. 3% or more)</label>
+                <input type="number" id="change2day" name="change2day" step="0.01" required>
+                <br>
+                <input type="submit" value="Run Strategy">
+            </form>
+        </div>
+        <br>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!-- watchlist.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Watch List</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function updateSelectedStock_sp500() {
+            var selectedStock = document.getElementById('stocks_sp500').value;
+            document.getElementById('stock_symbol').value = selectedStock;
+        }
+        function updateSelectedStock_hk() {
+            var selectedStock = document.getElementById('stocks_hk').value;
+            document.getElementById('stock_symbol').value = selectedStock;
+        }
+
+        function removeStock(stock) {
+            // Use fetch API to send a POST request to the server for stock removal
+            fetch('/remove_stock', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'username={{ username }}&stock_symbol=' + stock,
+            })
+            .then(response => {
+                // Check if the removal was successful (you may need to adjust the condition based on your server response)
+                if (response.ok) {
+                    // Reload the page or perform any additional actions
+                    window.location.reload();
+                } else {
+                    console.error('Failed to remove stock:', response.statusText);
+                    // Handle error as needed
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error as needed
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/watchlist">Personal Watch List</a></li>
+                    <li><a href="/day3_trade">3-Day Trade Strategy</a></li>
+                    <li><a href="/risk_return">Risk and Return Comparison</a></li>
+                    <li>
+                        {% if session['username'] %}
+                            <a href="/logout">Log Out ({{ session['username'] }})</a>
+                        {% else %}
+                            <a href="/login?next={{ request.path }}">Log In</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <h1>Personal Watch List</h1>
+        
+        <h2>Your Watchlist:</h2>
+
+        <ul class="watchlist">
+            {% for stock in watchlist %}
+                <li class="watchlist-item">
+                    <div class="symbol-circle">{{ stock }}
+                        <div class="delete-icon" onclick="removeStock('{{ stock }}')">&#10006;</div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <label for="stocks">Select a Stock from S&P 500:</label>
+        <select name="selected_stock" id="stocks_sp500" onchange="updateSelectedStock_sp500()">
+            {% for stock_symbol in sp500_tickers %}
+                <option value="{{ stock_symbol }}">{{ stock_symbol }}</option>
+            {% endfor %}
+        </select>
+        <label for="stocks">Select a Stock from Hong Kong Index:</label>
+        <select name="selected_stock" id="stocks_hk" onchange="updateSelectedStock_hk()">
+            {% for stock_symbol in hk_tickers %}
+                <option value="{{ stock_symbol }}">{{ stock_symbol }}</option>
+            {% endfor %}
+        </select>
+
+        <form action="/add_stock" method="post">
+            <input type="hidden" name="username" value="{{ username }}">
+            <label for="stock_symbol">Add Stock Symbol:</label>
+            <input type="text" id="stock_symbol" name="stock_symbol" required>
+            <input type="submit" value="Add">
+        </form>
+
+        {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
