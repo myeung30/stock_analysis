@@ -18,7 +18,8 @@ users_collection = db['users']
 def read_stock_list(stock_market):
     file_path = 'stock_market.xlsx'
     market_symbol = pd.read_excel(file_path)
-    return list(market_symbol[stock_market])
+    stock_list = market_symbol[stock_market].dropna().tolist()
+    return stock_list
 
 def is_valid_stock(stock_symbol):
     try:
