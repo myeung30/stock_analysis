@@ -41,6 +41,29 @@
                 // Handle error as needed
             });
         }
+        function validateStockSymbol() {
+            var stockSymbolInput = document.getElementById('stock_symbol');
+            var errorMessage = document.getElementById('error-message');
+            var stockSymbol = stockSymbolInput.value;
+
+            fetch('/check_stock_data?symbol=' + stockSymbol)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.available) {
+                        errorMessage.innerText = '';
+                        document.getElementById('add_stock_form').submit();
+                    } else {
+                        errorMessage.innerText = 'Invalid stock symbol. Please enter a valid symbol.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            // Prevent the default form submission
+            return false;
+        }
+    
     </script>
 </head>
 <body>
@@ -90,18 +113,18 @@
             {% endfor %}
         </select>
 
-        <form action="/add_stock" method="post">
+        <form action="/add_stock" method="post" onsubmit="return validateStockSymbol()" id="add_stock_form">
             <input type="hidden" name="username" value="{{ username }}">
-            <label for="stock_symbol">Add Stock Symbol: (You can also input stock in other countries. e.g. 7974.T, 600519.SS, TD.TO)</label>
+            <label for="stock_symbol">Add Stock Symbol: 
+                <p>(You can also input stock in other countries. e.g. 7974.T, 600519.SS, TD.TO)</p>
+                <p>(For HK stock, you need to input 4 digit. e.g. 0123.HK)</p></label>
             <input type="text" id="stock_symbol" name="stock_symbol" required>
             <input type="submit" value="Add">
+            
         </form>
 
-        {% if error %}
-            <div class="error-message">
-                <p>{{ error }}</p>
-            </div>
-        {% endif %}
+        <div id="error-message" class="error-message"></div>
+
     </div>
 </body>
 </html>

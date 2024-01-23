@@ -210,7 +210,7 @@ def check_stock_data():
 
     try:
         # Use yfinance to check if data is available for the given stock symbol
-        stock_data = yf.download(symbol, start='2022-01-01', end='2022-01-02')
+        stock_data = yf.download(symbol, start=(datetime.today() - timedelta(days=10)), end=datetime.today())
         if stock_data.empty:
             return jsonify({'available': False})
         else:
@@ -221,4 +221,4 @@ def check_stock_data():
         return jsonify({'available': False})
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000)
+    app.run(host="0.0.0.0",port=5000, debug=True)
