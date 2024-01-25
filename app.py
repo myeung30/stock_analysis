@@ -229,7 +229,7 @@ def price_predict():
     if request.method == 'POST':
         symbol_for_predictions = request.form['symbol']
 
-        start_date_for_training = '2010-01-01'
+        start_date_for_training = '2018-01-01'
         end_date_for_training = '2024-01-01'
         data_for_training = load_data(symbol_for_predictions, start_date_for_training, end_date_for_training)
         data_for_training, scaler_tmr, scaler_overnight, model_tmr, model_overnight = preprocess_data(data_for_training)
