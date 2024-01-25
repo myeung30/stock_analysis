@@ -234,14 +234,9 @@ def price_predict():
         data_for_training = load_data(symbol_for_predictions, start_date_for_training, end_date_for_training)
         data_for_training, scaler_tmr, scaler_overnight, model_tmr, model_overnight = preprocess_data(data_for_training)
 
-        last_10_day_predictions, mse_tmr, mse_overnight = get_last_10_day_predictions(symbol_for_predictions,
-                                                                                   data_for_training.copy(),
-                                                                                   scaler_tmr, scaler_overnight,
-                                                                                   model_tmr, model_overnight)
+        last_10_day_predictions, mse_tmr, mse_overnight = get_last_10_day_predictions(symbol_for_predictions, data_for_training.copy(), scaler_tmr, scaler_overnight, model_tmr, model_overnight)
 
-        return render_template('price_predict.html', symbol=symbol_for_predictions,
-                               last_10_rows=last_10_day_predictions,
-                               mse_tmr=mse_tmr, mse_overnight=mse_overnight)
+        return render_template('price_predict.html', symbol=symbol_for_predictions, last_10_rows=last_10_day_predictions, mse_tmr=mse_tmr, mse_overnight=mse_overnight)
     else:
         # Define last_10_rows for the initial page load
         last_10_rows = None  # You can set it to an empty DataFrame if you prefer

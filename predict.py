@@ -62,7 +62,7 @@ def preprocess_data(data):
 
 def get_last_10_day_predictions(symbol, data, scaler_tmr, scaler_overnight, model_tmr, model_overnight):
     end_date = datetime.datetime.now(tz=pytz.timezone('Asia/Hong_Kong')).strftime("%Y-%m-%d")
-    start_date = (datetime.datetime.now() - datetime.timedelta(days=365 * 10)).strftime("%Y-%m-%d")
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=300)).strftime("%Y-%m-%d")
     recent_data = load_data(symbol, start_date, end_date)
 
     # Preprocess the recent data
