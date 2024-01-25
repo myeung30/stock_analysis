@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from pymongo import MongoClient
 from risk_return_analysis import calculate_risk_return, generate_risk_return_plot, sort_watchlist
 from day3_trade import get_stock_data, plot_signals, get_trade_data, calculate_cumulative_percentage_gain
+from predict import load_data, preprocess_data, get_last_10_day_predictions
 import pandas as pd
 import matplotlib.pyplot as plt
 import io
@@ -220,6 +221,32 @@ def check_stock_data():
         # Handle exceptions (e.g., invalid stock symbol)
         print(f"Error checking stock data: {e}")
         return jsonify({'available': False})
+
+
+@app.route('/price_predict', methods=['GET', 'POST'])
+def price_predict():
+    
+    if request.method == 'POST':
+        symbol_for_predictions = request.form['symbol']
+
+        start_date_for_training = '2010-01-01'
+        end_date_for_training = '2024-01-01'
+        data_for_training = load_data(symbol_for_predictions, start_date_for_training, end_date_for_training)
+        data_for_training, scaler_tmr, scaler_overnight, model_tmr, model_overnight = preprocess_data(data_for_training)
+
+        last_10_day_predictions, mse_tmr, mse_overnight = get_last_10_day_predictions(symbol_for_predictions,
+                                                                                   data_for_training.copy(),
+                                                                                   scaler_tmr, scaler_overnight,
+                                                                                   model_tmr, model_overnight)
+
+        return render_template('price_predict.html', symbol=symbol_for_predictions,
+                               last_10_rows=last_10_day_predictions,
+                               mse_tmr=mse_tmr, mse_overnight=mse_overnight)
+    else:
+        # Define last_10_rows for the initial page load
+        last_10_rows = None  # You can set it to an empty DataFrame if you prefer
+        return render_template('price_predict.html', last_10_rows=last_10_rows)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=5000, debug=True)

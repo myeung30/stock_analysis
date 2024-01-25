@@ -14,6 +14,7 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/watchlist">Personal Watch List</a></li>
+                <li><a href="/price_predict">A.I. price prediction</a></li>
                 <li><a href="/day3_trade">3-Day Trade Strategy</a></li>
                 <li><a href="/risk_return">Risk and Return Comparison</a></li>
                 {% if session['username'] %}
@@ -52,9 +53,9 @@
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>% Change 2 Days Ago</th>
-                        <th>% Change Yesterday</th>
-                        <th>% Change on the trade day</th>
+                        <th>The percentage change of first significant day</th>
+                        <th>The percentage change of second significant day</th>
+                        <th>The percentage change of third day (Trade Day)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,7 +73,7 @@
             <p>Number of Trades: {{ num_trades }}</p>
             <p>Cumulative Percentage Gain/Loss: {{ cumulative_percentage_gain }} %</p>
             <br>
-            <p>That's mean you can get a cumulative <span class="highlight">{{ cumulative_percentage_gain }} %</span> gain in just <span class="highlight">{{ num_trades }}</span> trading days. ( Buy at the open and sell at the close on the Same Day)</p>
+            <p>That's mean you can get a cumulative <span class="highlight">{{ cumulative_percentage_gain }} %</span> gain in <span class="highlight">{{ num_trades }}</span> trading days. ( Buy at the open and sell at the close on the Same Day)</p>
             <br>
             <h2>Test this strategy with other stock data: </h2>
         {% endif %}
@@ -88,11 +89,12 @@
                 <label for="end_date">End Date:</label>
                 <input type="date" id="end_date" name="end_date" required>
                 <br>
-                <label for="change1day">% Change Yesterday: (better test this strategy with significant % change, e.g. 3% or more)</label>
+                <label for="change2day">The percentage change of first significant day: (better test this strategy with significant % change, e.g. 3% or more)</label>
+                <input type="number" id="change2day" name="change2day" step="0.01" required>
+                <label for="change1day">The percentage change of second significant day: (better test this strategy with significant % change, e.g. 3% or more)</label>
                 <input type="number" id="change1day" name="change1day" step="0.01" required>
                 <br>
-                <label for="change2day">% Change 2 Days Ago: (better test this strategy with significant % change, e.g. 3% or more)</label>
-                <input type="number" id="change2day" name="change2day" step="0.01" required>
+                
                 <br>
                 <input type="submit" value="Run Strategy">
             </form>

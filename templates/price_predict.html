@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Stock Price Prediction</title>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/watchlist">Personal Watch List</a></li>
+                    <li><a href="/price_predict">A.I. price prediction</a></li>
+                    <li><a href="/day3_trade">3-Day Trade Strategy</a></li>
+                    <li><a href="/risk_return">Risk and Return Comparison</a></li>
+                    {% if session['username'] %}
+                        <li><a href="/logout">Log Out ({{ session['username'] }})</a></li>
+                    {% else %}
+                        <li><a href="/login">Log In</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+        <div class="content">
+            <h1>A.I. Price Prediction</h1>
+            
+            <form action="price_predict" method="post">
+                <label for="symbol">Enter Stock Symbol:</label>
+                <input type="text" id="symbol" name="symbol" required>
+                <button type="submit">Start AI prediction</button>
+            </form>
+            <br>
+
+            {% if last_10_rows is not none and not last_10_rows.empty %}
+                <h2>Last Prediction:</h2>
+                <p>Estimated Tomorrow Open Price: <span class="highlight">{{ last_10_rows['Est_tmr_open'].iloc[-1]|round(2) }}</span></p>
+                <p>Estimated Tomorrow Close Price: <span class="highlight">{{ last_10_rows['Est_tmr_close'].iloc[-1]|round(2) }}</span></p>
+                <br>
+
+                <h2>Last 10 Day Predictions:</h2>
+                <table border="1">
+                    <tr>
+                        <th>Date</th>
+                        <th>Open</th>
+                        <th>Close</th>
+                        <th>Estimated Pct Open</th>
+                        <th>Real Pct Open</th>
+                        <th>Estimated Tmr Open</th>
+                        <th>Real Tmr Open</th>
+                        <th>Estimated Pct Close</th>
+                        <th>Real Pct Close</th>
+                        <th>Estimated Tmr Close</th>
+                        <th>Real Tmr Close</th>
+                    </tr>
+                    {% for index, row in last_10_rows.iterrows() %}
+                        <tr>
+                            <td>{{ index.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ "{:.2f}".format(row['Open']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Close']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Est_pct_open']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Real_pct_open']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Est_tmr_open']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Real_tmr_open']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Est_pct_close']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Real_pct_close']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Est_tmr_close']) }}</td>
+                            <td>{{ "{:.2f}".format(row['Real_tmr_close']) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <br>
+
+                <h2>Mean Squared Error:</h2>
+                <p>MSE for estimating tomorrow close price: {{ "{:.4f}".format(mse_tmr) }}</p>
+                <p>MSE for estimating tomorrow open price: {{ "{:.4f}".format(mse_overnight) }}</p>
+            {% else %}
+                <p>It may take some time to generate the AI model.</p>
+            {% endif %}
+            <br>
+        </div> 
+    </div> 
+</body>
+</html>

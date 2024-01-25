@@ -9,6 +9,25 @@
 </head>
 <body>
     <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/watchlist">Personal Watch List</a></li>
+                    <li><a href="/price_predict">A.I. price prediction</a></li>
+                    <li><a href="/day3_trade">3-Day Trade Strategy</a></li>
+                    <li><a href="/risk_return">Risk and Return Comparison</a></li>
+                    <li>
+                        {% if session['username'] %}
+                            <a href="/logout">Log Out ({{ session['username'] }})</a>
+                        {% else %}
+                            <a href="/login?next={{ request.path }}">Log In</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </header>    
+        
         <h1>Login</h1>
         <form action="/login" method="POST">
             <label for="username">Username:</label>
