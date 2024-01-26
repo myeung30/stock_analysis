@@ -9,10 +9,13 @@ import io
 import base64
 from datetime import datetime, timedelta
 import yfinance as yf
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-client = MongoClient('mongodb+srv://9010boris:nHf5FrVDjY1wHBip@cluster0.zrhy4lb.mongodb.net/')
+client = MongoClient(os.getenv("MONGODB_KEY"))
 db = client['stock_app']
 users_collection = db['users']
 
